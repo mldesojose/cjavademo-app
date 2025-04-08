@@ -16,6 +16,8 @@ export class FormeditComponent {
   curso: Curso = new Curso()
   titulo:string = "Actualizar curso"
 
+  aulasPermitidas: string[] = ['A01', 'B01', 'C01', 'D01', 'E01'];
+
   constructor(private cursoService: CursoService,
   private router: Router,
   private activatedRoute: ActivatedRoute) { }
@@ -36,6 +38,12 @@ export class FormeditComponent {
 
 
   update():void{
+
+    if (!this.curso.aula || !this.aulasPermitidas.includes(this.curso.aula)) {
+      swal.fire('Error', 'El valor del aula no es válido. Debe ser A01, B01, C01, D01 o E01.', 'error');
+      return;  // Si el aula no es válida, no continuar con la creación
+    }
+
     this.cursoService.update(this.curso)
     .subscribe( curso => {
       this.router.navigate(['/cursos'])
